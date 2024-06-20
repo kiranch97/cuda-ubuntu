@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cuda-v7
+  namespace: tenant4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cuda-v7-app
+  template:
+    metadata:
+      labels:
+        app: cuda-v7-app
+    spec:
+      containers:
+      - name: cuda-v1-container
+        image: docker.io/kiranch97/ubuntu-22-04-cuda-v7:latest
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            cpu: "2"
+            memory: "8Gi"
+          requests:
+            nvidia.com/gpu: 1
+            cpu: "2"
+            memory: "8Gi"
+        env:
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: "compute,utility"
+        args:
+        - bash
+        - -c
+        - |
+          nvidia-smi -L;
+          sleep infinity
